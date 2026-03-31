@@ -1,8 +1,8 @@
 {
   "mappings": [
-    "/content/aem-boilerplate/:/"
+    "/content/xero-xwalk/:/"
   ],
   "includes": [
-    "/content/aem-boilerplate/"
+    "/content/xero-xwalk/"
   ]
 }

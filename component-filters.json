@@ -15,7 +15,8 @@
       "hero",
       "cards",
       "columns",
-      "fragment"
+      "fragment",
+      "rtetest"
     ]
   },
   {
@@ -38,5 +39,94 @@
       "button",
       "title"
     ]
+  },
+  {
+    "id": "rtetest",
+    "components": [
+      "richtext"
+    ],
+    "rte": {
+      "toolbar": {
+        "format": [
+          "bold",
+          "italic"
+        ],
+        "blocks": [
+          "paragraph",
+          "h1",
+          "h2"
+        ],
+        "list": [
+          "bullet_list",
+          "ordered_list"
+        ],
+        "insert": [
+          "link",
+          "unlink",
+          "image"
+        ],
+        "alignment": [
+          "left",
+          "center",
+          "right",
+          "justify"
+        ],
+        "indentation": [
+          "indent",
+          "outdent"
+        ],
+        "editor": [
+          "removeformat"
+        ],
+        "direction": [
+          "rtl",
+          "ltr"
+        ],
+        "sr_script": [
+          "superscript",
+          "subscript"
+        ],
+        "sections": [
+          "format",
+          "sr_script",
+          "blocks",
+          "list",
+          "insert",
+          "alignment",
+          "direction",
+          "editor"
+        ]
+      },
+      "actions": {
+        "bold": {
+          "tag": "b",
+          "shortcut": "Mod-B",
+          "label": "Bold"
+        },
+        "italic": {
+          "tag": "em",
+          "shortcut": "Mod-I"
+        },
+        "bullet_list": {
+          "wrapInParagraphs": true,
+          "label": "Bullet List"
+        },
+        "ordered_list": {
+          "wrapInParagraphs": false
+        },
+        "link": {
+          "hideTarget": false,
+          "shortcut": "Mod-K",
+          "label": "Add Link"
+        },
+        "unlink": {
+          "label": "Remove Link"
+        },
+        "h1": {
+          "shortcut": "Mod-Alt-1",
+          "label": "Main Heading"
+        }
+      }
+    }
   }
 ]

@@ -214,5 +214,17 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "rtetest",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "body",
+        "label": "Body",
+        "valueType": "string",
+        "required": true
+      }
+    ]
   }
 ]

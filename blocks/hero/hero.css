@@ -1,56 +1,238 @@
+/*
+ * Parity with xero.com/au/ left-aligned header (ATT00695):
+ * Region__Background #0078C8 + 1rem radius; Heading/Typography/Button from inline styled-components.
+ */
 .hero-container .hero-wrapper {
   max-width: unset;
   padding: 0;
 }
 
 .hero {
-  position: relative;
-  padding: 48px 24px 56px;
-  min-height: 320px;
-}
+  --hero-bg: #0078c8;
+  --hero-space-xl: 4.5rem;
+  --hero-space-lg: 3rem;
 
-.hero::before {
-  content: '';
-  position: absolute;
-  z-index: 0;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgb(27 49 64 / 55%) 0%,
-    rgb(19 181 234 / 35%) 100%
-  );
-  pointer-events: none;
-}
-
-.hero .default-content-wrapper {
-  position: relative;
-  z-index: 1;
-}
-
-.hero h1 {
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--background-color);
-  text-shadow: 0 1px 2px rgb(0 0 0 / 15%);
-}
-
-.hero picture {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  object-fit: cover;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: stretch;
+  gap: var(--hero-space-lg);
   box-sizing: border-box;
+  position: relative;
+  margin: 0;
+  padding: 1.5rem;
+  min-height: unset;
+  border-radius: 1rem;
+  background-color: var(--hero-bg);
+  color: #fff;
 }
 
-.hero img {
-  object-fit: cover;
+.hero > div:nth-child(2) {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+}
+
+.hero > div:first-child {
+  flex: 1 1 46%;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  min-width: 0;
+}
+
+.hero > div:first-child > div {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  border-radius: 1rem;
+}
+
+.hero > div:first-child picture {
+  position: static;
+  display: block;
   width: 100%;
   height: 100%;
 }
 
-@media (width >= 900px) {
+.hero > div:first-child img {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
+.hero > div:nth-child(2) > div {
+  max-width: 100%;
+  padding: clamp(2rem, 5vw, var(--hero-space-xl)) 0;
+}
+
+.hero > div:nth-child(2) > div > p:not(:has(a)) {
+  margin: 0 0 var(--hero-space-lg);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.hero > div:nth-child(2) > div > p:has(a),
+.hero > div:nth-child(2) > div > div:has(a) {
+  margin: 0;
+}
+
+.hero h1 {
+  margin: 0 0 var(--hero-space-lg);
+  max-width: 100%;
+  padding: 0;
+  color: #fff;
+  font-size: clamp(2.25rem, 11vw, 4.5rem);
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: 0;
+  text-align: left;
+  text-shadow: none;
+}
+
+.hero h2 {
+  margin: 0 0 var(--hero-space-lg);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+/* Secondary CTA — matches Button__Element secondary on product theme (.gZlkWi) */
+.hero .button-container a.button:any-link {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  margin: 0;
+  border: 0.2rem solid #fff;
+  border-radius: 0.25rem;
+  padding: 0 1.1rem;
+  background-color: transparent;
+  color: #fff;
+  font-weight: 700;
+  font-family: var(--body-font-family);
+  font-size: 1.4rem;
+  line-height: 3.6rem;
+  box-shadow: none;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.hero .button-container a.button:hover,
+.hero .button-container a.button:focus {
+  background-color: rgb(255 255 255 / 12%);
+  border-color: #fff;
+  color: #fff;
+  box-shadow: none;
+}
+
+.hero .button-container a.button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.hero > div:nth-child(2) > div > p a:any-link,
+.hero > div:nth-child(2) > div > div a:any-link,
+.hero > div:nth-child(2) a.button:any-link {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: center;
+  margin: 0;
+  border: 0.2rem solid #fff;
+  border-radius: 0.25rem;
+  padding: 0 1.1rem;
+  background-color: transparent;
+  color: #fff;
+  font-weight: 700;
+  font-family: var(--body-font-family);
+  font-size: 1.4rem;
+  line-height: 3.6rem;
+  box-shadow: none;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.hero > div:nth-child(2) > div > p a:hover,
+.hero > div:nth-child(2) > div > p a:focus,
+.hero > div:nth-child(2) > div > div a:hover,
+.hero > div:nth-child(2) > div > div a:focus,
+.hero > div:nth-child(2) a.button:hover,
+.hero > div:nth-child(2) a.button:focus {
+  background-color: rgb(255 255 255 / 12%);
+  border-color: #fff;
+  color: #fff;
+  box-shadow: none;
+}
+
+.hero > div:nth-child(2) > div > p a:focus-visible,
+.hero > div:nth-child(2) > div > div a:focus-visible,
+.hero > div:nth-child(2) a.button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+@media (width >= 63.125em) {
   .hero {
-    padding: 40px 32px;
+    flex-direction: row-reverse;
+    align-items: stretch;
+    gap: var(--hero-space-lg);
+    padding: 0;
+    border-radius: 1rem;
+  }
+
+  .hero > div:first-child {
+    justify-content: flex-end;
+    align-items: stretch;
+  }
+
+  .hero > div:first-child > div {
+    width: 100%;
+    max-width: none;
+    border-radius: 0 1rem 1rem 0;
+    align-self: stretch;
+  }
+
+  .hero > div:first-child img {
+    width: 100%;
+    height: 100%;
+    min-height: 20rem;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hero h1 {
+    font-size: 6rem;
+    letter-spacing: -0.0833rem;
+  }
+
+  .hero h2 {
+    font-size: 2.3rem;
+  }
+
+  .hero > div:nth-child(2) > div > p:not(:has(a)) {
+    font-size: 2.3rem;
+  }
+
+  .hero > div:nth-child(2) > div {
+    padding: 4.5rem 0 4.5rem 2.5rem;
+    max-width: 54rem;
+  }
+
+  .hero .button-container a.button:any-link,
+  .hero > div:nth-child(2) > div > p a:any-link,
+  .hero > div:nth-child(2) > div > div a:any-link,
+  .hero > div:nth-child(2) a.button:any-link {
+    font-size: 1.25rem;
+    line-height: 2.6667rem;
+    padding: 0 1.1667rem;
+    border-width: 0.1667rem;
   }
 }

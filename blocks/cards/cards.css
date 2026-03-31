@@ -3,7 +3,7 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
+  grid-template-columns: 1fr;
   gap: 24px;
 }
 
@@ -13,6 +13,7 @@
   border-radius: 12px;
   background-color: var(--background-color);
   box-shadow: 0 2px 8px rgb(27 49 64 / 6%);
+  min-width: 0;
 }
 
 .cards .cards-card-body {
@@ -27,4 +28,18 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+}
+
+@media (width >= 600px) {
+  .cards > ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
+@media (width >= 900px) {
+  .cards > ul {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px;
+  }
 }

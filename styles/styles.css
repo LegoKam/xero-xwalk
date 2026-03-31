@@ -40,8 +40,9 @@
   /* nav height */
   --nav-height: 64px;
 
-  /* main column width (header, sections, footer) */
+  /* main content / header / footer width */
   --layout-width: 80%;
+  --layout-max-width: none;
 }
 
 @media (width >= 900px) {
@@ -248,6 +249,7 @@ main > .section {
 main > .section > div {
   box-sizing: border-box;
   width: var(--layout-width);
+  max-width: var(--layout-max-width);
   margin-inline: auto;
   padding: 0 24px;
 }

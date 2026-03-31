@@ -8,7 +8,6 @@ footer {
 footer .footer > div {
   box-sizing: border-box;
   width: var(--layout-width);
-  max-width: var(--layout-max-width);
   margin-inline: auto;
   padding: 40px 24px 24px;
 }

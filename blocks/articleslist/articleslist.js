@@ -1,6 +1,6 @@
 import { readBlockConfig } from '../../scripts/aem.js';
 
-const DEFAULT_ENDPOINT = 'https://publish-p152232-e1579596.adobeaemcloud.com/graphql/execute.json/xero-xwalk/articlelist';
+const DEFAULT_ENDPOINT = `https://publish-p152232-e1579596.adobeaemcloud.com/graphql/execute.json/xero-xwalk/articlelist?ts=${Date.now()}`;
 
 function createCard(article) {
   const title = article?.title?.trim();

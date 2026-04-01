@@ -85,7 +85,7 @@ function getAueResource(article) {
  */
 function getArticleDetailHref(contentPath, authorMode) {
   const basePath = authorMode
-    ? '/content/xero-xwalk/index/article-detail'
+    ? '/content/xero-xwalk/index/article-detail.html'
     : '/index/article-detail';
   const url = new URL(basePath, window.location.origin);
   url.searchParams.set('articlePath', contentPath);

@@ -216,6 +216,16 @@
     ]
   },
   {
+    "id": "articleslist",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title"
+      }
+    ]
+  },
+  {
     "id": "rtetest",
     "fields": [
       {

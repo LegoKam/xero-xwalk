@@ -1,11 +1,76 @@
 import { readBlockConfig } from '../../scripts/aem.js';
 
-const DEFAULT_ENDPOINT = `https://publish-p152232-e1579596.adobeaemcloud.com/graphql/execute.json/xero-xwalk/articlelist?ts=${Date.now()}`;
+const DEFAULT_ENDPOINT = 'https://publish-p152232-e1579596.adobeaemcloud.com/graphql/execute.json/xero-xwalk/articlelist';
 
-function createCard(article) {
-  const title = article?.title?.trim();
-  const image = article?.banner?._dmS7Url;
+function isAuthorMode() {
+  const { href } = window.location;
+  const ancestorOriginCount = window.location.ancestorOrigins?.length || 0;
+
+  return Boolean(
+    ancestorOriginCount
+    || (href.includes('author') && href.includes('adobeaemcloud.com')),
+  );
+}
+
+function getEndpoint(endpoint, authorMode) {
+  const resolvedEndpoint = authorMode
+    ? endpoint.replace('://publish-', '://author-')
+    : endpoint;
+  const url = new URL(resolvedEndpoint, window.location.origin);
+
+  url.searchParams.set('_', Date.now());
+
+  return url.toString();
+}
+
+function getFetchOptions(authorMode) {
+  if (!authorMode) {
+    return {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+  }
+
+  return {
+    method: 'GET',
+    headers: {
+      'Access-Control-Request-Headers': 'Authorization',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+  };
+}
+
+function getImageSrc(article, authorMode) {
+  const image = article?.banner;
+
+  if (!image) {
+    return '';
+  }
+
+  return (authorMode && image._authorUrl)
+    || image._dmS7Url
+    || image._publishUrl
+    || '';
+}
+
+function getAueResource(article) {
   const path = article?._path?.trim();
+
+  if (!path) {
+    return '';
+  }
+
+  return `urn:aemconnection:${path}/jcr:content/data/${article?._variation || 'master'}`;
+}
+
+function createCard(article, authorMode) {
+  const title = article?.title?.trim();
+  const path = article?._path?.trim();
+  const image = getImageSrc(article, authorMode);
+  const aueResource = getAueResource(article);
 
   if (!title) {
     return null;
@@ -13,6 +78,12 @@ function createCard(article) {
 
   const li = document.createElement('li');
   const wrapper = path ? document.createElement('a') : document.createElement('article');
+
+  if (aueResource) {
+    li.dataset.aueType = 'reference';
+    li.dataset.aueResource = aueResource;
+    li.dataset.aueFilter = 'cf';
+  }
 
   wrapper.className = 'articles-list-card';
 
@@ -31,6 +102,8 @@ function createCard(article) {
     img.src = image;
     img.alt = title;
     img.loading = 'lazy';
+    img.dataset.aueProp = 'banner';
+    img.dataset.aueType = 'media';
 
     imageWrapper.append(img);
     wrapper.append(imageWrapper);
@@ -41,6 +114,8 @@ function createCard(article) {
 
   const heading = document.createElement('h3');
   heading.textContent = title;
+  heading.dataset.aueProp = 'title';
+  heading.dataset.aueType = 'text';
 
   body.append(heading);
   wrapper.append(body);
@@ -49,8 +124,8 @@ function createCard(article) {
   return li;
 }
 
-async function fetchArticles(endpoint) {
-  const response = await fetch(endpoint);
+async function fetchArticles(endpoint, authorMode) {
+  const response = await fetch(endpoint, getFetchOptions(authorMode));
 
   if (!response.ok) {
     throw new Error(`Failed to load articles: ${response.status}`);
@@ -62,17 +137,18 @@ async function fetchArticles(endpoint) {
 
 export default async function decorate(block) {
   const config = readBlockConfig(block);
-  const endpoint = config.endpoint || DEFAULT_ENDPOINT;
+  const authorMode = isAuthorMode();
+  const endpoint = getEndpoint(config.endpoint || DEFAULT_ENDPOINT, authorMode);
   const count = Number.parseInt(config.count, 10);
 
   block.textContent = '';
   block.classList.add('articles-list-loading');
 
   try {
-    const items = await fetchArticles(endpoint);
+    const items = await fetchArticles(endpoint, authorMode);
     const articles = Number.isNaN(count) ? items : items.slice(0, count);
     const cards = articles
-      .map(createCard)
+      .map((article) => createCard(article, authorMode))
       .filter(Boolean);
 
     if (!cards.length) {

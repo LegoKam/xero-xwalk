@@ -93,12 +93,14 @@ function getArticleDetailHref(contentPath, authorMode) {
 }
 
 function createCard(article, authorMode) {
-  const title = article?.title?.trim();
+  const title = article?.title?.trim() ?? '';
   const path = article?._path?.trim();
   const image = getImageSrc(article, authorMode);
   const aueResource = getAueResource(article);
 
-  if (!title) {
+  const accessibleName = title || path?.split('/').filter(Boolean).pop() || 'Article';
+
+  if (!path && !image) {
     return null;
   }
 
@@ -115,7 +117,7 @@ function createCard(article, authorMode) {
 
   if (path) {
     wrapper.href = getArticleDetailHref(path, authorMode);
-    wrapper.setAttribute('aria-label', title);
+    wrapper.setAttribute('aria-label', accessibleName);
   } else {
     wrapper.classList.add('articles-list-card-disabled');
   }
@@ -126,7 +128,7 @@ function createCard(article, authorMode) {
 
     const img = document.createElement('img');
     img.src = image;
-    img.alt = title;
+    img.alt = title || accessibleName;
     img.loading = 'lazy';
     img.dataset.aueProp = 'banner';
     img.dataset.aueType = 'media';
@@ -135,16 +137,6 @@ function createCard(article, authorMode) {
     wrapper.append(imageWrapper);
   }
 
-  const body = document.createElement('div');
-  body.className = 'articles-list-card-body';
-
-  const heading = document.createElement('h3');
-  heading.textContent = title;
-  heading.dataset.aueProp = 'title';
-  heading.dataset.aueType = 'text';
-
-  body.append(heading);
-  wrapper.append(body);
   li.append(wrapper);
 
   return li;

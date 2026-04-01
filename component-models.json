@@ -142,6 +142,32 @@
     ]
   },
   {
+    "id": "article-detail",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "value": "Article not found",
+        "label": "Article not found message",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "endpoint",
+        "value": "",
+        "label": "GraphQL articleByPath base URL (optional)",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "articlePath",
+        "value": "",
+        "label": "AEM article path (optional if ?article= is used)",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {
@@ -212,16 +238,6 @@
         "value": "",
         "label": "Text",
         "valueType": "string"
-      }
-    ]
-  },
-  {
-    "id": "articles-list",
-    "fields": [
-      {
-        "component": "text",
-        "name": "title",
-        "label": "Title"
       }
     ]
   },

@@ -1,0 +1,83 @@
+/* Article detail: GraphQL-driven layout + empty state */
+.article-detail.article-detail-empty {
+  padding: 1.5rem 0;
+}
+
+.article-detail .article-detail-fallback {
+  margin: 0;
+  color: var(--text-color);
+  font-size: var(--body-font-size-m);
+}
+
+.article-detail-loading {
+  min-height: 4rem;
+}
+
+.article-detail-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 65ch;
+}
+
+.article-detail-banner {
+  margin: 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.article-detail-banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.article-detail-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.article-detail-title {
+  margin: 0;
+  font-size: var(--heading-font-size-xl);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-color);
+}
+
+.article-detail-subtitle {
+  margin: 0;
+  font-size: var(--body-font-size-l);
+  line-height: 1.5;
+  color: var(--text-color);
+}
+
+/* Richtext body from CF */
+.article-detail-content {
+  font-size: var(--body-font-size-m);
+  line-height: 1.6;
+  color: var(--text-color);
+}
+
+.article-detail-content :where(h2, h3) {
+  margin: 1.25rem 0 0.5rem;
+  font-size: var(--heading-font-size-m);
+  font-weight: 600;
+}
+
+.article-detail-content :where(p, ul, ol) {
+  margin: 0.75rem 0;
+}
+
+.article-detail-content ul,
+.article-detail-content ol {
+  padding-left: 1.25rem;
+}
+
+@media (width >= 900px) {
+  .article-detail .article-detail-fallback {
+    font-size: var(--body-font-size-s);
+  }
+}

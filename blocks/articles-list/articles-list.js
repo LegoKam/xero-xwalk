@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle -- GraphQL response uses _prefixed AEM fields */
 import { readBlockConfig } from '../../scripts/aem.js';
 
 const DEFAULT_ENDPOINT = 'https://publish-p152232-e1579596.adobeaemcloud.com/graphql/execute.json/xero-xwalk/articlelist';
@@ -66,6 +67,16 @@ function getAueResource(article) {
   return `urn:aemconnection:${path}/jcr:content/data/${article?._variation || 'master'}`;
 }
 
+/**
+ * @param {string} contentPath AEM content fragment path (_path)
+ * @returns {string}
+ */
+function getArticleDetailHref(contentPath) {
+  const url = new URL('/article-detail', window.location.origin);
+  url.searchParams.set('articlePath', contentPath);
+  return `${url.pathname}${url.search}`;
+}
+
 function createCard(article, authorMode) {
   const title = article?.title?.trim();
   const path = article?._path?.trim();
@@ -88,7 +99,7 @@ function createCard(article, authorMode) {
   wrapper.className = 'articles-list-card';
 
   if (path) {
-    wrapper.href = path;
+    wrapper.href = getArticleDetailHref(path);
     wrapper.setAttribute('aria-label', title);
   } else {
     wrapper.classList.add('articles-list-card-disabled');

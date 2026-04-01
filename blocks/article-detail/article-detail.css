@@ -1,4 +1,9 @@
-/* Article detail: GraphQL-driven layout + empty state */
+/* Article detail: matches site layout width (see styles.css --layout-width) */
+.article-detail {
+  box-sizing: border-box;
+  width: 100%;
+}
+
 .article-detail.article-detail-empty {
   padding: 1.5rem 0;
 }
@@ -17,8 +22,9 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  box-sizing: border-box;
   width: 100%;
-  max-width: 65ch;
+  max-width: var(--layout-max-width);
 }
 
 .article-detail-banner {

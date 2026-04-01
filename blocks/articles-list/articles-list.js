@@ -1,7 +1,18 @@
 /* eslint-disable no-underscore-dangle -- GraphQL response uses _prefixed AEM fields */
+/* eslint-disable no-console -- intentional diagnostics for this block */
 import { readBlockConfig } from '../../scripts/aem.js';
 
+const NS = '[articles-list]';
 const DEFAULT_ENDPOINT = 'https://publish-p152232-e1579596.adobeaemcloud.com/graphql/execute.json/xero-xwalk/articlelist';
+
+/**
+ * @param {unknown} payload
+ * @returns {object|null}
+ */
+function getGraphqlErrors(payload) {
+  if (!payload || typeof payload !== 'object') return null;
+  return 'errors' in payload ? payload.errors : null;
+}
 
 function isAuthorMode() {
   const { href } = window.location;
@@ -69,10 +80,14 @@ function getAueResource(article) {
 
 /**
  * @param {string} contentPath AEM content fragment path (_path)
+ * @param {boolean} authorMode Universal Editor / AEM author preview
  * @returns {string}
  */
-function getArticleDetailHref(contentPath) {
-  const url = new URL('/index/article-detail', window.location.origin);
+function getArticleDetailHref(contentPath, authorMode) {
+  const basePath = authorMode
+    ? '/content/xero-xwalk/index/article-detail'
+    : '/index/article-detail';
+  const url = new URL(basePath, window.location.origin);
   url.searchParams.set('articlePath', contentPath);
   return `${url.pathname}${url.search}`;
 }
@@ -99,7 +114,7 @@ function createCard(article, authorMode) {
   wrapper.className = 'articles-list-card';
 
   if (path) {
-    wrapper.href = getArticleDetailHref(path);
+    wrapper.href = getArticleDetailHref(path, authorMode);
     wrapper.setAttribute('aria-label', title);
   } else {
     wrapper.classList.add('articles-list-card-disabled');
@@ -136,21 +151,77 @@ function createCard(article, authorMode) {
 }
 
 async function fetchArticles(endpoint, authorMode) {
-  const response = await fetch(endpoint, getFetchOptions(authorMode));
+  const fetchOptions = getFetchOptions(authorMode);
+  console.log(NS, 'fetch: request', {
+    url: endpoint,
+    authorMode,
+    credentials: fetchOptions.credentials ?? 'omit',
+    headerKeys: fetchOptions.headers ? Object.keys(fetchOptions.headers) : [],
+  });
+
+  console.time(`${NS} graphql`);
+  const response = await fetch(endpoint, fetchOptions);
+  console.timeEnd(`${NS} graphql`);
+
+  console.log(NS, 'fetch: response', {
+    ok: response.ok,
+    status: response.status,
+    statusText: response.statusText,
+    contentType: response.headers.get('content-type'),
+  });
 
   if (!response.ok) {
     throw new Error(`Failed to load articles: ${response.status}`);
   }
 
   const payload = await response.json();
-  return payload?.data?.articlesList?.items ?? [];
+  const gqlErrors = getGraphqlErrors(payload);
+  if (gqlErrors) {
+    console.warn(NS, 'GraphQL errors in payload', gqlErrors);
+  }
+
+  const items = payload?.data?.articlesList?.items ?? [];
+  console.log(NS, 'payload: articlesList.items', {
+    count: items.length,
+    hasData: Boolean(payload?.data),
+    dataKeys: payload?.data ? Object.keys(payload.data) : [],
+  });
+
+  if (items.length > 0) {
+    console.table(
+      items.map((a, i) => ({
+        idx: i,
+        title: (a?.title ?? '').toString().slice(0, 60),
+        _path: a?._path ?? '',
+        hasBanner: Boolean(a?.banner),
+      })),
+    );
+  }
+
+  return items;
 }
 
 export default async function decorate(block) {
+  console.groupCollapsed(`${NS} decorate`);
+  console.log(NS, 'start', {
+    href: window.location.href,
+    blockClass: block.className,
+    blockChildren: block.children.length,
+  });
+
   const config = readBlockConfig(block);
   const authorMode = isAuthorMode();
   const endpoint = getEndpoint(config.endpoint || DEFAULT_ENDPOINT, authorMode);
   const count = Number.parseInt(config.count, 10);
+
+  console.log(NS, 'config', { ...config });
+  console.log(NS, 'resolved', {
+    authorMode,
+    endpoint,
+    countRaw: config.count,
+    countParsed: Number.isNaN(count) ? 'all (NaN)' : count,
+    defaultEndpoint: DEFAULT_ENDPOINT,
+  });
 
   block.textContent = '';
   block.classList.add('articles-list-loading');
@@ -158,11 +229,27 @@ export default async function decorate(block) {
   try {
     const items = await fetchArticles(endpoint, authorMode);
     const articles = Number.isNaN(count) ? items : items.slice(0, count);
+
+    console.log(NS, 'after slice', {
+      itemsFromApi: items.length,
+      articlesAfterCount: articles.length,
+      limitApplied: !Number.isNaN(count),
+    });
+
     const cards = articles
-      .map((article) => createCard(article, authorMode))
+      .map((article, index) => {
+        const card = createCard(article, authorMode);
+        if (!card) {
+          console.warn(NS, 'createCard returned null', { index, title: article?.title });
+        }
+        return card;
+      })
       .filter(Boolean);
 
+    console.log(NS, 'cards built', { count: cards.length });
+
     if (!cards.length) {
+      console.warn(NS, 'empty UI: no cards to render');
       block.innerHTML = '<p>No articles available.</p>';
       return;
     }
@@ -170,11 +257,16 @@ export default async function decorate(block) {
     const list = document.createElement('ul');
     list.append(...cards);
     block.replaceChildren(list);
+    console.log(NS, 'done: list mounted', { listItemCount: cards.length });
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error loading articles-list block', error);
+    console.error(NS, 'decorate failed', {
+      name: error?.name,
+      message: error?.message,
+      stack: error?.stack,
+    });
     block.innerHTML = '<p>Unable to load articles right now.</p>';
   } finally {
     block.classList.remove('articles-list-loading');
+    console.groupEnd();
   }
 }

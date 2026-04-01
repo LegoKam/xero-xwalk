@@ -23,7 +23,7 @@ function buildArticleByPathUrl(baseEndpoint, articlePath, authorMode) {
   if (authorMode) {
     ep = ep.replace('://publish-', '://author-');
   }
-  const joined = `${ep};articlePath=${encodeURIComponent(articlePath)}`;
+  const joined = `${ep};articlePath=${decodeURIComponent(articlePath)}`;
   const sep = joined.includes('?') ? '&' : '?';
   return `${joined}${sep}_=${Date.now()}`;
 }

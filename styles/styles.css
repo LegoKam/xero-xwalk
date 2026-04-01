@@ -19,6 +19,10 @@
   --link-color: #13b5ea;
   --link-hover-color: #0b8bc7;
   --border-subtle: #e0e6ed;
+  --button-primary-color: #5ad6a7;
+  --button-primary-hover-color: #49c193;
+  --button-primary-text-color: #10362d;
+  --button-radius: 6px;
 
   /* fonts — Inter approximates Xero’s clean sans marketing UI */
   --body-font-family: inter, -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
@@ -163,35 +167,49 @@ a:hover {
 a.button:any-link,
 button {
   box-sizing: border-box;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   max-width: 100%;
   margin: 12px 0;
-  border: 2px solid transparent;
-  border-radius: 999px;
-  padding: 0.55em 1.35em;
+  border: 1px solid transparent;
+  border-radius: var(--button-radius);
+  padding: 0.8em 1.5em;
   font-family: var(--body-font-family);
   font-style: normal;
-  font-weight: 600;
-  line-height: 1.25;
+  font-weight: 700;
+  line-height: 1.2;
   text-align: center;
   text-decoration: none;
-  background-color: var(--link-color);
-  color: var(--background-color);
+  background-color: var(--button-primary-color);
+  color: var(--button-primary-text-color);
   cursor: pointer;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  box-shadow: 0 1px 2px rgb(19 181 234 / 25%);
-  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: none;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
 }
 
 a.button:hover,
 a.button:focus,
 button:hover,
 button:focus {
-  background-color: var(--link-hover-color);
-  box-shadow: 0 2px 8px rgb(19 181 234 / 35%);
+  background-color: var(--button-primary-hover-color);
+  color: var(--button-primary-text-color);
+  text-decoration: none;
+  transform: translateY(-1px);
   cursor: pointer;
+}
+
+a.button:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--button-primary-text-color);
+  outline-offset: 2px;
 }
 
 button:disabled,
@@ -203,8 +221,8 @@ button:disabled:hover {
 a.button.secondary,
 button.secondary {
   background-color: var(--background-color);
-  border: 2px solid var(--link-color);
-  color: var(--link-color);
+  border: 1px solid var(--button-primary-color);
+  color: var(--button-primary-text-color);
   box-shadow: none;
 }
 
@@ -212,9 +230,9 @@ a.button.secondary:hover,
 a.button.secondary:focus,
 button.secondary:hover,
 button.secondary:focus {
-  background-color: rgb(19 181 234 / 8%);
-  color: var(--link-hover-color);
-  border-color: var(--link-hover-color);
+  background-color: rgb(90 214 167 / 12%);
+  color: var(--button-primary-text-color);
+  border-color: var(--button-primary-hover-color);
 }
 
 button.secondary:disabled,

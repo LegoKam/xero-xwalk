@@ -216,7 +216,7 @@
     ]
   },
   {
-    "id": "articleslist",
+    "id": "articles-list",
     "fields": [
       {
         "component": "text",

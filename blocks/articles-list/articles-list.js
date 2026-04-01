@@ -14,18 +14,18 @@ function createCard(article) {
   const li = document.createElement('li');
   const wrapper = path ? document.createElement('a') : document.createElement('article');
 
-  wrapper.className = 'articleslist-card';
+  wrapper.className = 'articles-list-card';
 
   if (path) {
     wrapper.href = path;
     wrapper.setAttribute('aria-label', title);
   } else {
-    wrapper.classList.add('articleslist-card-disabled');
+    wrapper.classList.add('articles-list-card-disabled');
   }
 
   if (image) {
     const imageWrapper = document.createElement('div');
-    imageWrapper.className = 'articleslist-card-image';
+    imageWrapper.className = 'articles-list-card-image';
 
     const img = document.createElement('img');
     img.src = image;
@@ -37,7 +37,7 @@ function createCard(article) {
   }
 
   const body = document.createElement('div');
-  body.className = 'articleslist-card-body';
+  body.className = 'articles-list-card-body';
 
   const heading = document.createElement('h3');
   heading.textContent = title;
@@ -66,7 +66,7 @@ export default async function decorate(block) {
   const count = Number.parseInt(config.count, 10);
 
   block.textContent = '';
-  block.classList.add('articleslist-loading');
+  block.classList.add('articles-list-loading');
 
   try {
     const items = await fetchArticles(endpoint);
@@ -85,9 +85,9 @@ export default async function decorate(block) {
     block.replaceChildren(list);
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('Error loading articleslist block', error);
+    console.error('Error loading articles-list block', error);
     block.innerHTML = '<p>Unable to load articles right now.</p>';
   } finally {
-    block.classList.remove('articleslist-loading');
+    block.classList.remove('articles-list-loading');
   }
 }

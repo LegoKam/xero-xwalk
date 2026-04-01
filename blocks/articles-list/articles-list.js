@@ -72,7 +72,7 @@ function getAueResource(article) {
  * @returns {string}
  */
 function getArticleDetailHref(contentPath) {
-  const url = new URL('/article-detail', window.location.origin);
+  const url = new URL('/index/article-detail', window.location.origin);
   url.searchParams.set('articlePath', contentPath);
   return `${url.pathname}${url.search}`;
 }
